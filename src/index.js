@@ -2,12 +2,52 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 import * as serviceWorker from './serviceWorker';
 
+const initialState = {
+  count: 0,
+  color:'pink',
+};
+function countReducer(state = initialState, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return {
+        
+        count: state.count + 1,
+        color: action.payload,
+      };
+      case "CHANGECOLOR":
+      return {
+        count:state.count,
+        color: action.payload,
+        
+      };
+      case "DECREMENT":
+        return{
+          count: state.count - 1 < 0 ? 0 : state.count -1,
+          
+          color: action.payload,
+        }
+        case "RESET":
+          return{
+            count: 0,
+            color: action.payload,
+          }
+    default:
+      return state;
+  }
+}
+const store = createStore(
+  countReducer,
+  // Hooks up Redux Devtools
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+    </Provider>,
   document.getElementById('root')
 );
 
